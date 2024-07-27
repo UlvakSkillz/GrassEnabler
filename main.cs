@@ -8,6 +8,7 @@ using Il2CppRUMBLE.MoveSystem;
 using Il2CppRUMBLE.Managers;
 using NAudio.Wave;
 using MelonLoader.Utils;
+using Il2CppRUMBLE.Interactions.InteractionBase;
 
 namespace GrassEnabler
 {
@@ -60,6 +61,7 @@ namespace GrassEnabler
     {
         bool leftHandIn = false;
         bool rightHandIn = false;
+        bool mowerActive = false;
         
         void OnTriggerEnter(Collider other)
         {
@@ -74,23 +76,6 @@ namespace GrassEnabler
             if ((other.gameObject.name == "Bone_Hand_R") && (IsWithinRotation(other.gameObject.transform.localEulerAngles, new Vector3(350f, 50f, 25f))))
             {
                 rightHandIn = true;
-            }
-            if (leftHandIn && rightHandIn)
-            {
-                int i = 2;
-                if (other.gameObject.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.GetChild(2).gameObject.name == "Health")
-                {
-                    i = 3;
-                    if (!main.LawnMowerOthersActive)
-                    {
-                        return;
-                    }
-                }
-                other.gameObject.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.GetChild(i).GetChild(13).GetChild(0).GetChild(0).GetChild(1).GetChild(0).gameObject.active = true;
-                if (main.playMowerSound && (i == 2))
-                {
-                    main.PlaySoundIfFileExists(@"\GrassEnabler\LawnMower.mp3");
-                }
             }
         }
 
@@ -187,7 +172,42 @@ namespace GrassEnabler
                 {
                     i = 3;
                 }
+                mowerActive = false;
                 other.gameObject.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.GetChild(i).GetChild(13).GetChild(0).GetChild(0).GetChild(1).GetChild(0).gameObject.active = false;
+            }
+        }
+
+        void OnTriggerStay(Collider other)
+        {
+            if (mowerActive || ((other.gameObject.name != "Bone_Hand_L") && (other.gameObject.name != "Bone_Hand_R")))
+            {
+                return;
+            }
+            if (!leftHandIn && (other.gameObject.name == "Bone_Hand_L") && (IsWithinRotation(other.gameObject.transform.localEulerAngles, new Vector3(345f, 305f, 350f))))
+            {
+                leftHandIn = true;
+            }
+            if (!rightHandIn && (other.gameObject.name == "Bone_Hand_R") && (IsWithinRotation(other.gameObject.transform.localEulerAngles, new Vector3(350f, 50f, 25f))))
+            {
+                rightHandIn = true;
+            }
+            if (leftHandIn && rightHandIn)
+            {
+                int i = 2;
+                if (other.gameObject.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.GetChild(2).gameObject.name == "Health")
+                {
+                    i = 3;
+                    if (!main.LawnMowerOthersActive)
+                    {
+                        return;
+                    }
+                }
+                mowerActive = true;
+                other.gameObject.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.GetChild(i).GetChild(13).GetChild(0).GetChild(0).GetChild(1).GetChild(0).gameObject.active = true;
+                if (main.playMowerSound && (i == 2))
+                {
+                    main.PlaySoundIfFileExists(@"\GrassEnabler\LawnMower.mp3");
+                }
             }
         }
     }
@@ -196,7 +216,7 @@ namespace GrassEnabler
     {
         private string currentScene = "Loader";
         private bool init = false;
-        private GameObject grassParent, grassShort, grassLong, storedGrass;
+        private GameObject grassParent, grassShort, grassLong, grassShortNoCollider, grassLongNoCollider, storedGrass;
         System.Random random = new System.Random();
         private int grassCount;
         private static float grassHeight;
@@ -216,11 +236,14 @@ namespace GrassEnabler
         private int playerCount;
         UI UI = UI.instance;
         private Mod GrassEnabler = new Mod();
+        private bool flatLandModFound = false;
+        private bool flatLandActive = false;
+        private int flatLandSize = 125;
 
         public override void OnLateInitializeMelon()
         {
             GrassEnabler.ModName = "GrassEnabler";
-            GrassEnabler.ModVersion = "2.8.2";
+            GrassEnabler.ModVersion = "2.8.4";
             GrassEnabler.SetFolder("GrassEnabler");
             GrassEnabler.AddToList("Grass Count", 5000, "Adds Grass to Maps. Can change Grass Count", new Tags { });
             GrassEnabler.AddToList("Grass Height", 1f, "Changes Grass Height", new Tags { });
@@ -256,6 +279,7 @@ namespace GrassEnabler
             int lastGrassCount = grassCount;
             grassCount = (int)GrassEnabler.Settings[0].SavedValue;
             grassHeight = (float)GrassEnabler.Settings[1].SavedValue;
+            bool lastGrassRemoval = grassRemoval;
             grassRemoval = (bool)GrassEnabler.Settings[2].SavedValue;
             grassGrowth = (bool)GrassEnabler.Settings[3].SavedValue;
             preGrowthTime = (float)GrassEnabler.Settings[4].SavedValue;
@@ -267,7 +291,7 @@ namespace GrassEnabler
             {
                 MelonCoroutines.Start(SpawnLawnMower(false));
             }
-            if ((lastGrassCount != grassCount) && (storedGrass != null))
+            if ((storedGrass != null) && ((lastGrassCount != grassCount) || (lastGrassRemoval != grassRemoval)))
             {
                 GameObject.DestroyImmediate(storedGrass);
                 MelonCoroutines.Start(SetupStoredGrass());
@@ -278,6 +302,10 @@ namespace GrassEnabler
                 if (currentScene == "Gym")
                 {
                     Calls.GameObjects.Gym.Scene.Grass.GetGameObject().SetActive(true);
+                    if (flatLandActive)
+                    {
+                        MelonCoroutines.Start(SetupFlatLand());
+                    }
                 }
                 else
                 {
@@ -300,6 +328,7 @@ namespace GrassEnabler
                 storedGrass.active = false;
             }
             LawnMowerIsActive = false;
+            flatLandActive = false;
         }
 
         public override void OnFixedUpdate()
@@ -336,18 +365,32 @@ namespace GrassEnabler
             {
                 grassParent = new GameObject();
                 grassLong = GameObject.Instantiate(Calls.GameObjects.Gym.Scene.Grass.GetGameObject().transform.GetChild(0).gameObject, new Vector3(0, 0, 0), Quaternion.EulerAngles(0, 0, 0));
+                grassLongNoCollider = GameObject.Instantiate(Calls.GameObjects.Gym.Scene.Grass.GetGameObject().transform.GetChild(0).gameObject, new Vector3(0, 0, 0), Quaternion.EulerAngles(0, 0, 0));
                 grassShort = GameObject.Instantiate(Calls.GameObjects.Gym.Scene.Grass.GetGameObject().transform.GetChild(4).gameObject, new Vector3(0, 0, 0), Quaternion.EulerAngles(0, 0, 0));
+                grassShortNoCollider = GameObject.Instantiate(Calls.GameObjects.Gym.Scene.Grass.GetGameObject().transform.GetChild(4).gameObject, new Vector3(0, 0, 0), Quaternion.EulerAngles(0, 0, 0));
                 grassParent.name = "GrassParent";
                 grassLong.name = "GrassLong";
+                grassLongNoCollider.name = "GrassLong";
                 grassShort.name = "GrassShort";
+                grassShortNoCollider.name = "GrassShort";
                 grassLong.transform.parent = grassParent.transform;
+                grassLongNoCollider.transform.parent = grassParent.transform;
                 grassShort.transform.parent = grassParent.transform;
+                grassShortNoCollider.transform.parent = grassParent.transform;
                 SetupColliders(grassLong);
                 SetupColliders(grassShort);
                 GameObject.DontDestroyOnLoad(grassParent);
                 grassParent.active = false;
                 MelonCoroutines.Start(SetupStoredGrass());
                 BuildLawnMower();
+                foreach (MelonBase mod in MelonBase.RegisteredMelons)
+                {
+                    if (mod.Info.Name == "FlatLand")
+                    {
+                        flatLandModFound = true;
+                        break;
+                    }
+                }
                 init = true;
             }
             if (init)
@@ -356,6 +399,10 @@ namespace GrassEnabler
                 {
                     storedGrass.active = false;
                     Calls.GameObjects.Gym.Scene.Grass.GetGameObject().SetActive(true);
+                    if (flatLandModFound)
+                    {
+                        MelonCoroutines.Start(InitFlatLandFound());
+                    }
                 }
                 else
                 {
@@ -369,6 +416,17 @@ namespace GrassEnabler
                     }
                 }
             }
+        }
+
+        public IEnumerator InitFlatLandFound()
+        {
+            yield return new WaitForSeconds(1f);
+            GameObject.Find("FlatLand/FlatLandButton/Button").GetComponent<InteractionButton>().onPressed.AddListener(new System.Action(() =>
+            {
+                flatLandActive = true;
+                MelonCoroutines.Start(SetupFlatLand());
+            }));
+            yield break;
         }
 
         public static IEnumerator RegrowGrass(GameObject grass)
@@ -404,8 +462,16 @@ namespace GrassEnabler
             {
                 int pickedGrass = random.Next(0, 2);
                 GameObject whichGrass;
-                if (pickedGrass == 0) { whichGrass = grassShort; }
-                else { whichGrass = grassLong; }
+                if (grassRemoval)
+                {
+                    if (pickedGrass == 0) { whichGrass = grassShort; }
+                    else { whichGrass = grassLong; }
+                }
+                else
+                {
+                    if (pickedGrass == 0) { whichGrass = grassShortNoCollider; }
+                    else { whichGrass = grassLongNoCollider; }
+                }
                 GameObject grass = GameObject.Instantiate(whichGrass, storedGrass.transform);
                 grass.transform.position = new Vector3(0, 0, 0);
                 grass.transform.rotation = Quaternion.EulerAngles(0, 0, 0);
@@ -441,10 +507,9 @@ namespace GrassEnabler
             yield return new WaitForSeconds(0.25f);
             if (currentScene == "Gym")
             {
-                yield break;
+                storedGrass.transform.position = new Vector3(0, -0.01f - (0.039f * grassHeight), 0);
             }
-            storedGrass.active = true;
-            if (currentScene == "Park")
+            else if (currentScene == "Park")
             {
                 storedGrass.transform.position = new Vector3(0, Calls.GameObjects.Park.Scene.Park.MainStaticGroup.Arenas.GymArena0.RingClamp.GetGameObject().transform.position.y - (0.039f * grassHeight), 0);
             }
@@ -459,6 +524,7 @@ namespace GrassEnabler
             if (grassGrowth)
             {
                 storedGrass.transform.localScale = new Vector3(1, 0, 1);
+                storedGrass.active = true;
                 while (storedGrass.transform.localScale.y < 1)
                 {
                     if (growthTime == 0) { break; }
@@ -466,7 +532,92 @@ namespace GrassEnabler
                     yield return new WaitForFixedUpdate();
                 }
             }
+            else
+            {
+                storedGrass.active = true;
+            }
             storedGrass.transform.localScale = new Vector3(1, 1, 1);
+            yield break;
+        }
+
+        private IEnumerator SetupFlatLand()
+        {
+            yield return new WaitForSeconds(1f);
+            GameObject floor = GameObject.Find("Floor");
+            flatLandSize = (int)floor.transform.localScale.x / 2;
+            for (int i = 0; i < grassCount; i++)
+            {
+                float x = floor.transform.position.x + random.Next(-flatLandSize, flatLandSize + 1);
+                if (x < floor.transform.position.x)
+                {
+                    x += (float)random.NextDouble();
+                }
+                else if (x > floor.transform.position.x)
+                {
+                    x -= (float)random.NextDouble();
+                }
+                else
+                {
+                    if (random.Next(0, 2) == 0)
+                    {
+                        x += (float)random.NextDouble();
+                    }
+                    else
+                    {
+                        x -= (float)random.NextDouble();
+                    }
+                }
+                float z = floor.transform.position.z + random.Next(-flatLandSize, flatLandSize + 1);
+                if (z < floor.transform.position.z)
+                {
+                    z += (float)random.NextDouble();
+                }
+                else if (z > floor.transform.position.z)
+                {
+                    z -= (float)random.NextDouble();
+                }
+                else
+                {
+                    if (random.Next(0, 2) == 0)
+                    {
+                        z += (float)random.NextDouble();
+                    }
+                    else
+                    {
+                        z -= (float)random.NextDouble();
+                    }
+                }
+                Vector3 grassSpot = new Vector3(x, 0, z);
+                Quaternion grassRotation = Quaternion.EulerAngles(0, random.Next(0, 361), 0);
+                GameObject grass = storedGrass.transform.GetChild(i).gameObject;
+                grass.transform.localPosition = grassSpot;
+                grass.transform.rotation = grassRotation;
+                grass.transform.localScale = new Vector3(1, grassHeight, 1);
+                grass.active = true;
+                if (i % 100 == 0)
+                {
+                    yield return new WaitForFixedUpdate();
+                }
+            }
+            if (currentScene == "Gym")
+            {
+                MelonCoroutines.Start(MapStartGrassGrow());
+            }
+            MelonCoroutines.Start(WatchFloorSize(floor));
+            yield break;
+        }
+
+        private IEnumerator WatchFloorSize(GameObject floor)
+        {
+            while (floor != null)
+            {
+                yield return new WaitForSeconds(1f);
+            }
+            storedGrass.active = false;
+            if (flatLandActive)
+            {
+                MelonCoroutines.Start(SetupFlatLand());
+            }
             yield break;
         }
 

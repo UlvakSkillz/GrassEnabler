@@ -4,7 +4,7 @@ using System.Runtime.InteropServices;
 using MelonLoader;
 using GrassEnabler; // The namespace of your mod class
 // ...
-[assembly: MelonInfo(typeof(main), "GrassEnabler", "2.8.2", "UlvakSkillz")]
+[assembly: MelonInfo(typeof(main), "GrassEnabler", "2.8.4", "UlvakSkillz", "https://thunderstore.io/c/rumble/p/UlvakSkillz/GrassEnabler/")]
 [assembly: MelonGame("Buckethead Entertainment", "RUMBLE")]
 [assembly: MelonColor(255, 195, 0, 255)]
 [assembly: MelonAuthorColor(255, 195, 0, 255)]
