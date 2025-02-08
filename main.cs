@@ -65,15 +65,15 @@ namespace GrassEnabler
         
         void OnTriggerEnter(Collider other)
         {
-            if ((other.gameObject.name != "Bone_Hand_L") && (other.gameObject.name != "Bone_Hand_R"))
+            if ((other.gameObject.name != "Bone_HandAlpha_L") && (other.gameObject.name != "Bone_HandAlpha_R"))
             {
                 return;
             }
-            if ((other.gameObject.name == "Bone_Hand_L") && (IsWithinRotation(other.gameObject.transform.localEulerAngles, new Vector3(345f, 305f, 350f))))
+            if ((other.gameObject.name == "Bone_HandAlpha_L") && (IsWithinRotation(other.gameObject.transform.localEulerAngles, new Vector3(160f, 132f, 148f))))
             {
                 leftHandIn = true;
             }
-            if ((other.gameObject.name == "Bone_Hand_R") && (IsWithinRotation(other.gameObject.transform.localEulerAngles, new Vector3(350f, 50f, 25f))))
+            if ((other.gameObject.name == "Bone_HandAlpha_R") && (IsWithinRotation(other.gameObject.transform.localEulerAngles, new Vector3(167f, 222f, 47f))))
             {
                 rightHandIn = true;
             }
@@ -81,6 +81,7 @@ namespace GrassEnabler
 
         private bool IsWithinRotation(Vector3 angle, Vector3 pose)
         {
+            angle = new Vector3(angle.x, angle.y - 180f, angle.z);
             Vector3 handRot, poseRot;
             float acceptance = 45f;
             handRot = angle;
@@ -153,57 +154,57 @@ namespace GrassEnabler
 
         void OnTriggerExit(Collider other)
         {
-            if ((other.gameObject.name != "Bone_Hand_L") && (other.gameObject.name != "Bone_Hand_R"))
+            if ((other.gameObject.name != "Bone_HandAlpha_L") && (other.gameObject.name != "Bone_HandAlpha_R"))
             {
                 return;
             }
-            if (other.gameObject.name == "Bone_Hand_L")
+            if (other.gameObject.name == "Bone_HandAlpha_L")
             {
                 leftHandIn = false;
             }
-            if (other.gameObject.name == "Bone_Hand_R")
+            if (other.gameObject.name == "Bone_HandAlpha_R")
             {
                 rightHandIn = false;
             }
             if (!leftHandIn || !rightHandIn)
             {
-                int i = 2;
-                if (other.gameObject.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.GetChild(2).gameObject.name == "Health")
+                int i = 5;
+                if (other.gameObject.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.GetChild(5).gameObject.name == "Health")
                 {
-                    i = 3;
+                    i = 6;
                 }
                 mowerActive = false;
-                other.gameObject.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.GetChild(i).GetChild(13).GetChild(0).GetChild(0).GetChild(1).GetChild(0).gameObject.active = false;
+                other.gameObject.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.GetChild(i).GetChild(5).GetChild(0).GetChild(0).GetChild(1).GetChild(0).gameObject.active = false;
             }
         }
 
         void OnTriggerStay(Collider other)
         {
-            if (mowerActive || ((other.gameObject.name != "Bone_Hand_L") && (other.gameObject.name != "Bone_Hand_R")))
+            if (mowerActive || ((other.gameObject.name != "Bone_HandAlpha_L") && (other.gameObject.name != "Bone_HandAlpha_R")))
             {
                 return;
             }
-            if (!leftHandIn && (other.gameObject.name == "Bone_Hand_L") && (IsWithinRotation(other.gameObject.transform.localEulerAngles, new Vector3(345f, 305f, 350f))))
+            if (!leftHandIn && (other.gameObject.name == "Bone_HandAlpha_L") && (IsWithinRotation(other.gameObject.transform.localEulerAngles, new Vector3(345f, 305f, 350f))))
             {
                 leftHandIn = true;
             }
-            if (!rightHandIn && (other.gameObject.name == "Bone_Hand_R") && (IsWithinRotation(other.gameObject.transform.localEulerAngles, new Vector3(350f, 50f, 25f))))
+            if (!rightHandIn && (other.gameObject.name == "Bone_HandAlpha_R") && (IsWithinRotation(other.gameObject.transform.localEulerAngles, new Vector3(350f, 50f, 25f))))
             {
                 rightHandIn = true;
             }
             if (leftHandIn && rightHandIn)
             {
-                int i = 2;
-                if (other.gameObject.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.GetChild(2).gameObject.name == "Health")
+                int i = 5;
+                if (other.gameObject.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.GetChild(5).gameObject.name == "Health")
                 {
-                    i = 3;
+                    i = 6;
                     if (!main.LawnMowerOthersActive)
                     {
                         return;
                     }
                 }
                 mowerActive = true;
-                other.gameObject.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.GetChild(i).GetChild(13).GetChild(0).GetChild(0).GetChild(1).GetChild(0).gameObject.active = true;
+                other.gameObject.transform.parent.parent.parent.parent.parent.parent.parent.parent.parent.GetChild(i).GetChild(5).GetChild(0).GetChild(0).GetChild(1).GetChild(0).gameObject.active = true;
                 if (main.playMowerSound && (i == 2))
                 {
                     main.PlaySoundIfFileExists(@"\GrassEnabler\LawnMower.mp3");
@@ -243,7 +244,7 @@ namespace GrassEnabler
         public override void OnLateInitializeMelon()
         {
             GrassEnabler.ModName = "GrassEnabler";
-            GrassEnabler.ModVersion = "2.8.4";
+            GrassEnabler.ModVersion = "2.9.0";
             GrassEnabler.SetFolder("GrassEnabler");
             GrassEnabler.AddToList("Grass Count", 5000, "Adds Grass to Maps. Can change Grass Count", new Tags { });
             GrassEnabler.AddToList("Grass Height", 1f, "Changes Grass Height", new Tags { });
@@ -335,7 +336,7 @@ namespace GrassEnabler
         {
             if (lawnMowerScene != null)
             {
-                lawnMowerScene.transform.rotation = Quaternion.Euler(0, PlayerManager.instance.localPlayer.Controller.gameObject.transform.GetChild(1).GetChild(0).GetChild(0).rotation.eulerAngles.y + 90f, 0);
+                lawnMowerScene.transform.rotation = Quaternion.Euler(0, PlayerManager.instance.localPlayer.Controller.gameObject.transform.GetChild(5).GetChild(2).rotation.eulerAngles.y + 90f, 0);
 
                 if (!spawningOthers && (playerCount != PlayerManager.instance.AllPlayers.Count - 1))
                 {
@@ -353,7 +354,7 @@ namespace GrassEnabler
                 {
                     if (lawnMowerSceneOther[i] != null)
                     {
-                        lawnMowerSceneOther[i].transform.rotation = Quaternion.Euler(0, PlayerManager.instance.AllPlayers[i + 1].Controller.gameObject.transform.GetChild(1).GetChild(0).GetChild(0).rotation.eulerAngles.y + 90f, 0);
+                        lawnMowerSceneOther[i].transform.rotation = Quaternion.Euler(0, PlayerManager.instance.AllPlayers[i + 1].Controller.gameObject.transform.GetChild(6).GetChild(2).rotation.eulerAngles.y + 90f, 0);
                     }
                 }
             }
@@ -838,7 +839,7 @@ namespace GrassEnabler
                 }
                 LawnMowerIsActive = true;
                 lawnMowerScene = GameObject.Instantiate(lawnMower);
-                lawnMowerScene.transform.parent = PlayerManager.instance.localPlayer.Controller.gameObject.transform.GetChild(2).GetChild(13).GetChild(0);
+                lawnMowerScene.transform.parent = PlayerManager.instance.localPlayer.Controller.gameObject.transform.GetChild(5).GetChild(5).GetChild(0);
                 lawnMowerScene.transform.localPosition = new Vector3(0f, 0f, 0f);
                 lawnMowerScene.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
                 lawnMowerScene.active = true;
@@ -861,13 +862,13 @@ namespace GrassEnabler
             }
             playerCount = PlayerManager.instance.AllPlayers.Count - 1;
             lawnMowerSceneOther = new GameObject[playerCount];
-            for (int i = 0; i < PlayerManager.instance.AllPlayers.Count - 1; i++)
+            for (int i = 1; i < PlayerManager.instance.AllPlayers.Count; i++)
             {
-                lawnMowerSceneOther[i] = GameObject.Instantiate(lawnMower);
-                lawnMowerSceneOther[i].transform.parent = PlayerManager.instance.AllPlayers[i + 1].Controller.gameObject.transform.GetChild(3).GetChild(13).GetChild(0);
-                lawnMowerSceneOther[i].transform.localPosition = new Vector3(0f, 0f, 0f);
-                lawnMowerSceneOther[i].transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
-                lawnMowerSceneOther[i].active = true;
+                lawnMowerSceneOther[i - 1] = GameObject.Instantiate(lawnMower);
+                lawnMowerSceneOther[i - 1].transform.parent = PlayerManager.instance.AllPlayers[i].Controller.gameObject.transform.GetChild(6).GetChild(5).GetChild(0);
+                lawnMowerSceneOther[i - 1].transform.localPosition = new Vector3(0f, 0f, 0f);
+                lawnMowerSceneOther[i - 1].transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
+                lawnMowerSceneOther[i - 1].active = true;
             }
             spawningOthers = false;
             yield break;
@@ -878,6 +879,7 @@ namespace GrassEnabler
             mowerSoundPlaying = true;
             var reader = new Mp3FileReader(FilePath);
             var waveOut = new WaveOutEvent();
+            waveOut.DeviceNumber = 0;
             waveOut.Init(reader);
             waveOut.Play();
             while (waveOut.PlaybackState == PlaybackState.Playing)

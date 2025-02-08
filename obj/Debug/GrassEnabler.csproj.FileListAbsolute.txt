@@ -14,11 +14,9 @@ C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Tomlet.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Mono.Cecil.Pdb.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Mono.Cecil.Mdb.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Mono.Cecil.Rocks.dll
-C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\UnityEngine.SharedInternalsModule.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\WebSocketDotNet.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\MelonLoader.xml
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\obj\Debug\GrassEnabler.csproj.CoreCompileInputs.cache
-C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\obj\Debug\GrassEnabler.csproj.CopyComplete
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\obj\Debug\GrassEnabler.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\obj\Debug\GrassEnabler.pdb
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\AsmResolver.DotNet.dll
@@ -56,7 +54,6 @@ C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Unity.RenderPipe
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\UnityEngine.UIModule.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Il2CppRUMBLE.Rendering.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Il2CppPhotonVoice.dll
-C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\UnityEngine.SpatialTracking.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Il2CppRUMBLE.Platform.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Il2CppRUMBLE.Platform.Info.Steam.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\UnityEngine.InputLegacyModule.dll
@@ -69,8 +66,6 @@ C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\UnityEngine.Phys
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Il2CppSystem.Numerics.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\UnityEngine.UnityWebRequestModule.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\UnityEngine.SubsystemsModule.dll
-C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\UnityEngine.TerrainModule.dll
-C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\UnityEngine.ClothModule.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\UnityEngine.AIModule.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\UnityEngine.AndroidJNIModule.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\UnityEngine.InputModule.dll
@@ -84,7 +79,6 @@ C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Il2CppPhotonVoic
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Il2CppRUMBLE.Platform.Info.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Il2Cppcom.rlabrecque.steamworks.net.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\UnityEngine.TextCoreTextEngineModule.dll
-C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\UnityEngine.UIElementsNativeModule.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\UnityEngine.JSONSerializeModule.dll
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\obj\Debug\GrassEnabler.csproj.AssemblyReference.cache
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\GrassEnabler.dll.config
@@ -108,3 +102,14 @@ C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\NAudio.WinForms.
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\NAudio.WinMM.xml
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\System.Security.AccessControl.xml
 C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\System.Security.Principal.Windows.xml
+C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Il2CppInterop.Common.dll
+C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Il2CppLIV.dll
+C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Il2CppInterop.Generator.dll
+C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Il2CppInterop.Runtime.dll
+C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Il2CppInterop.HarmonySupport.dll
+C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\UnityEngine.AssetBundleModule.dll
+C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\MonoMod.Backports.dll
+C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\Microsoft.Extensions.Logging.Abstractions.dll
+C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\System.Runtime.CompilerServices.Unsafe.dll
+C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\bin\Debug\MonoMod.ILHelpers.dll
+C:\Users\austi\source\repos\GrassEnabler\GrassEnabler\obj\Debug\GrassEna.47D7FEC9.Up2Date
