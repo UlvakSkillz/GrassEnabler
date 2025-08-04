@@ -244,7 +244,7 @@ namespace GrassEnabler
         public override void OnLateInitializeMelon()
         {
             GrassEnabler.ModName = "GrassEnabler";
-            GrassEnabler.ModVersion = "2.9.0";
+            GrassEnabler.ModVersion = "2.10.0";
             GrassEnabler.SetFolder("GrassEnabler");
             GrassEnabler.AddToList("Grass Count", 5000, "Adds Grass to Maps. Can change Grass Count", new Tags { });
             GrassEnabler.AddToList("Grass Height", 1f, "Changes Grass Height", new Tags { });
@@ -302,7 +302,7 @@ namespace GrassEnabler
                 storedGrass.active = false;
                 if (currentScene == "Gym")
                 {
-                    Calls.GameObjects.Gym.Scene.Grass.GetGameObject().SetActive(true);
+                    Calls.GameObjects.Gym.SCENE.Grass.GetGameObject().SetActive(true);
                     if (flatLandActive)
                     {
                         MelonCoroutines.Start(SetupFlatLand());
@@ -336,7 +336,7 @@ namespace GrassEnabler
         {
             if (lawnMowerScene != null)
             {
-                lawnMowerScene.transform.rotation = Quaternion.Euler(0, PlayerManager.instance.localPlayer.Controller.gameObject.transform.GetChild(5).GetChild(2).rotation.eulerAngles.y + 90f, 0);
+                lawnMowerScene.transform.rotation = Quaternion.Euler(0, PlayerManager.instance.localPlayer.Controller.gameObject.transform.GetChild(2).GetChild(3).rotation.eulerAngles.y + 90f, 0);
 
                 if (!spawningOthers && (playerCount != PlayerManager.instance.AllPlayers.Count - 1))
                 {
@@ -350,11 +350,13 @@ namespace GrassEnabler
                     MelonCoroutines.Start(SpawnLawnMowerOther());
                 }
                 if (lawnMowerSceneOther != null)
-                for (int i = 0; i < lawnMowerSceneOther.Length; i++)
                 {
-                    if (lawnMowerSceneOther[i] != null)
+                    for (int i = 0; i < lawnMowerSceneOther.Length; i++)
                     {
-                        lawnMowerSceneOther[i].transform.rotation = Quaternion.Euler(0, PlayerManager.instance.AllPlayers[i + 1].Controller.gameObject.transform.GetChild(6).GetChild(2).rotation.eulerAngles.y + 90f, 0);
+                        if (lawnMowerSceneOther[i] != null)
+                        {
+                            lawnMowerSceneOther[i].transform.rotation = Quaternion.Euler(0, PlayerManager.instance.AllPlayers[i + 1].Controller.gameObject.transform.GetChild(2).GetChild(3).rotation.eulerAngles.y + 90f, 0);
+                        }
                     }
                 }
             }
@@ -365,10 +367,10 @@ namespace GrassEnabler
             if (!init && (currentScene == "Gym"))
             {
                 grassParent = new GameObject();
-                grassLong = GameObject.Instantiate(Calls.GameObjects.Gym.Scene.Grass.GetGameObject().transform.GetChild(0).gameObject, new Vector3(0, 0, 0), Quaternion.EulerAngles(0, 0, 0));
-                grassLongNoCollider = GameObject.Instantiate(Calls.GameObjects.Gym.Scene.Grass.GetGameObject().transform.GetChild(0).gameObject, new Vector3(0, 0, 0), Quaternion.EulerAngles(0, 0, 0));
-                grassShort = GameObject.Instantiate(Calls.GameObjects.Gym.Scene.Grass.GetGameObject().transform.GetChild(4).gameObject, new Vector3(0, 0, 0), Quaternion.EulerAngles(0, 0, 0));
-                grassShortNoCollider = GameObject.Instantiate(Calls.GameObjects.Gym.Scene.Grass.GetGameObject().transform.GetChild(4).gameObject, new Vector3(0, 0, 0), Quaternion.EulerAngles(0, 0, 0));
+                grassLong = GameObject.Instantiate(Calls.GameObjects.Gym.SCENE.Grass.GetGameObject().transform.GetChild(0).gameObject, new Vector3(0, 0, 0), Quaternion.EulerAngles(0, 0, 0));
+                grassLongNoCollider = GameObject.Instantiate(Calls.GameObjects.Gym.SCENE.Grass.GetGameObject().transform.GetChild(0).gameObject, new Vector3(0, 0, 0), Quaternion.EulerAngles(0, 0, 0));
+                grassShort = GameObject.Instantiate(Calls.GameObjects.Gym.SCENE.Grass.GetGameObject().transform.GetChild(4).gameObject, new Vector3(0, 0, 0), Quaternion.EulerAngles(0, 0, 0));
+                grassShortNoCollider = GameObject.Instantiate(Calls.GameObjects.Gym.SCENE.Grass.GetGameObject().transform.GetChild(4).gameObject, new Vector3(0, 0, 0), Quaternion.EulerAngles(0, 0, 0));
                 grassParent.name = "GrassParent";
                 grassLong.name = "GrassLong";
                 grassLongNoCollider.name = "GrassLong";
@@ -399,7 +401,7 @@ namespace GrassEnabler
                 if (currentScene == "Gym") 
                 {
                     storedGrass.active = false;
-                    Calls.GameObjects.Gym.Scene.Grass.GetGameObject().SetActive(true);
+                    Calls.GameObjects.Gym.SCENE.Grass.GetGameObject().SetActive(true);
                     if (flatLandModFound)
                     {
                         MelonCoroutines.Start(InitFlatLandFound());
@@ -486,7 +488,7 @@ namespace GrassEnabler
             if (currentScene == "Gym") 
             {
                 storedGrass.active = false;
-                Calls.GameObjects.Gym.Scene.Grass.GetGameObject().SetActive(true);
+                Calls.GameObjects.Gym.SCENE.Grass.GetGameObject().SetActive(true);
             }
             else if (currentScene == "Map0") { MelonCoroutines.Start(SetupMap0()); }
             else if (currentScene == "Map1") { MelonCoroutines.Start(SetupMap1()); }
@@ -512,7 +514,7 @@ namespace GrassEnabler
             }
             else if (currentScene == "Park")
             {
-                storedGrass.transform.position = new Vector3(0, Calls.GameObjects.Park.Scene.Park.MainStaticGroup.Arenas.GymArena0.RingClamp.GetGameObject().transform.position.y - (0.039f * grassHeight), 0);
+                storedGrass.transform.position = new Vector3(0, Calls.GameObjects.Park.SCENE.Park.Mainstaticgroup.Arenas.Gymarena.Ringclamp.GetGameObject().transform.position.y - (0.039f * grassHeight), 0);
             }
             else if (currentScene == "Map0")
             {
@@ -674,7 +676,7 @@ namespace GrassEnabler
         {
             for (int i = 0; i < grassCount; i++)
             {
-                Vector3 ringSpot = Calls.GameObjects.Park.Scene.Park.MainStaticGroup.Arenas.GymArena0.RingClamp.GetGameObject().transform.position;
+                Vector3 ringSpot = Calls.GameObjects.Park.SCENE.Park.Mainstaticgroup.Arenas.Gymarena.Ringclamp.GetGameObject().transform.position;
                 Vector3 grassSpot = CalculatePoint(11, -0.31f);
                 Quaternion grassRotation = Quaternion.EulerAngles(0, random.Next(0, 361), 0);
                 GameObject grass = storedGrass.transform.GetChild(i).gameObject;
@@ -839,7 +841,7 @@ namespace GrassEnabler
                 }
                 LawnMowerIsActive = true;
                 lawnMowerScene = GameObject.Instantiate(lawnMower);
-                lawnMowerScene.transform.parent = PlayerManager.instance.localPlayer.Controller.gameObject.transform.GetChild(5).GetChild(5).GetChild(0);
+                lawnMowerScene.transform.parent = PlayerManager.instance.localPlayer.Controller.gameObject.transform.GetChild(7).GetChild(5).GetChild(0);
                 lawnMowerScene.transform.localPosition = new Vector3(0f, 0f, 0f);
                 lawnMowerScene.transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
                 lawnMowerScene.active = true;
@@ -865,7 +867,7 @@ namespace GrassEnabler
             for (int i = 1; i < PlayerManager.instance.AllPlayers.Count; i++)
             {
                 lawnMowerSceneOther[i - 1] = GameObject.Instantiate(lawnMower);
-                lawnMowerSceneOther[i - 1].transform.parent = PlayerManager.instance.AllPlayers[i].Controller.gameObject.transform.GetChild(6).GetChild(5).GetChild(0);
+                lawnMowerSceneOther[i - 1].transform.parent = PlayerManager.instance.AllPlayers[i].Controller.gameObject.transform.GetChild(7).GetChild(5).GetChild(0);
                 lawnMowerSceneOther[i - 1].transform.localPosition = new Vector3(0f, 0f, 0f);
                 lawnMowerSceneOther[i - 1].transform.localRotation = Quaternion.Euler(0f, 0f, 0f);
                 lawnMowerSceneOther[i - 1].active = true;
