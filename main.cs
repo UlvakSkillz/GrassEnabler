@@ -13,9 +13,9 @@ namespace GrassEnabler
 {
     public static class ModBuildInfo
     {
-        public const string Version = "3.0.0";
+        public const string Version = "3.0.1";
     }
-
+    
     public class main : MelonMod
     {
         private string currentScene = "Loader";
@@ -52,7 +52,7 @@ namespace GrassEnabler
             GrassEnabler.GetFromFile();
             GrassEnabler.ModSaved += Save;
             UI.instance.UI_Initialized += delegate { UI.instance.AddMod(GrassEnabler); };
-            Actions.onMapInitialized += Init;
+            Actions.onMapInitialized += MapLoaded;
             grassCount = (int)GrassEnabler.Settings[0].SavedValue;
             grassHeight = (float)GrassEnabler.Settings[1].SavedValue;
             grassWidth = (float)GrassEnabler.Settings[2].SavedValue;
@@ -138,7 +138,7 @@ namespace GrassEnabler
             flatLandActive = false;
         }
 
-        private void Init(string map)
+        private void MapLoaded(string map)
         {
             if (!init && (map == "Gym"))
             {
@@ -269,10 +269,10 @@ namespace GrassEnabler
 
         private void SetupColliders(GameObject grass)
         {
-            grass.layer = 15;
+            grass.layer = 14; //move
             BoxCollider box = grass.AddComponent<BoxCollider>();
             box.isTrigger = true;
-            box.size = new Vector3(0.1f, 0.5f, 0.1f);
+            box.size = new Vector3(0.1f, 0.75f, 0.1f);
             grass.AddComponent<ColliderCheck>();
         }
 
