@@ -19,16 +19,16 @@ namespace GrassEnabler
                     structure = other.GetComponentInChildren<Structure>();
                 }
             }
-            if ((structure == null) || !main.grassRemoval)
+            if ((structure == null) || !Preferences.PrefRemoval.Value)
             {
                 return;
             }
             if (structure.IsGrounded || structure.IsSpawning)
             {
                 this.transform.gameObject.SetActive(false);
-                if (main.grassGrowth)
+                if (Preferences.PrefRegrow.Value)
                 {
-                    MelonCoroutines.Start(main.RegrowGrass(this.transform.gameObject));
+                    MelonCoroutines.Start(Main.RegrowGrass(this.transform.gameObject));
                 }
             }
         }
@@ -45,16 +45,16 @@ namespace GrassEnabler
                     structure = other.GetComponentInChildren<Structure>();
                 }
             }
-            if ((structure == null) || !main.grassRemoval)
+            if ((structure == null) || !Preferences.PrefRemoval.Value)
             {
                 return;
             }
             if (structure.IsGrounded || structure.IsSpawning)
             {
                 this.transform.gameObject.SetActive(false);
-                if (main.grassGrowth)
+                if (Preferences.PrefRegrow.Value)
                 {
-                    MelonCoroutines.Start(main.RegrowGrass(this.transform.gameObject));
+                    MelonCoroutines.Start(Main.RegrowGrass(this.transform.gameObject));
                 }
             }
         }
