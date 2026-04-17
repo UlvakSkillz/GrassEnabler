@@ -8,7 +8,7 @@ using UnityEngine;
 
 namespace GrassEnabler
 {
-    public static class ModBuildInfo { public const string Version = "3.2.0"; }
+    public static class ModBuildInfo { public const string Version = "3.2.1"; }
     
     public class Main : MelonMod
     {
@@ -31,7 +31,7 @@ namespace GrassEnabler
         {
             flatLandModFound = MelonMod.RegisteredMelons.FirstOrDefault(mod => mod.Info.Name == "FlatLand") != null;
             Preferences.InitPrefs();
-            UI.Register(this, Preferences.GrassCountCategory, Preferences.GrassSettingsCategory, Preferences.GrassVisualsCategory).OnModSaved += Save;
+            UI.Register((MelonBase)this, Preferences.GrassCountCategory, Preferences.GrassSettingsCategory, Preferences.GrassVisualsCategory).OnModSaved += Save;
         }
 
         private void SetupDDOLGrass()
